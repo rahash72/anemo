@@ -1,0 +1,36 @@
+.form-card {
+  width: 60%;
+  text-align: center;
+  align-content: center;
+}
+
+.join-form {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+}
+
+.lock-icon {
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+@media only screen and (max-width: 768px) {
+  .form-card {
+    width: 90%;
+  }
+}
+
+.form-switch {
+  padding-bottom: 15px;
+}
+
+.left-header {
+  color: #297f87;
+}
+
+.logo {
+  height: 5rem;
+  width: 9rem;
+}
