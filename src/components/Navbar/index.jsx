@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import AuthContext from "../../store/AuthContext";
 import SideBar from "../SideBar";
 import "./styles.css";
+import toast from "react-hot-toast";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -25,6 +26,7 @@ export default function ButtonAppBar() {
 
   const handleLogout = () => {
     history.replace("/join");
+    toast.success("Logged Out!");
     authCtx.logout();
   };
 

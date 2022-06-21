@@ -19,6 +19,7 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
 import AuthContext from "../../../store/AuthContext";
+import toast from "react-hot-toast";
 
 const useStyles = makeStyles((theme) => ({
   margin: {
@@ -32,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
 const LoginForm = (props) => {
   const classes = useStyles();
   const authCtx = useContext(AuthContext);
-  const history = useHistory();
   const [showPassword, toggleShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -47,27 +47,24 @@ const LoginForm = (props) => {
   const handleLoginSubmit = (event) => {
     event.preventDefault();
     setIsLoading(true);
-    fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAvFOznWibkcC9X0GV2bFfBT_8AyDuH3NY",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          email: event.target.email.value,
-          password: event.target.password.value,
-          returnSecureToken: true,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    fetch("http://localhost:8080/api/auth/signin/", {
+      method: "POST",
+      body: JSON.stringify({
+        username: event.target.username.value,
+        password: event.target.password.value,
+        returnSecureToken: true,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((res) => {
         setIsLoading(false);
         if (res.ok) {
           return res.json();
         } else {
           return res.json().then((data) => {
-            let errorMessage = "Authentication Failed!";
+            let errorMessage = data.message;
 
             if (data && data.error && data.error.message) {
               errorMessage = data.error.message;
@@ -78,11 +75,11 @@ const LoginForm = (props) => {
         }
       })
       .then((data) => {
-        authCtx.login(data.idToken);
-        history.replace("/blog");
+        toast.success("Signed In Successfully");
+        authCtx.login(data);
       })
       .catch((err) => {
-        alert(err.message);
+        toast.error(err.message);
       });
   };
 
@@ -96,10 +93,10 @@ const LoginForm = (props) => {
           required
           margin="normal"
           fullWidth
-          name="email"
-          id="email"
-          label="Email Address"
-          type="email"
+          name="username"
+          id="username"
+          label="Username"
+          type="text"
           variant="outlined"
           autoFocus
         />

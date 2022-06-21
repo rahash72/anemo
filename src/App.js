@@ -14,7 +14,7 @@ import ServiceList from "./pages/EcommercePage/pages/ServiceList";
 import ProductList from "./pages/EcommercePage/pages/ProductList";
 import EcommercePage from "./pages/EcommercePage/pages/EcommercePage";
 import "./App.css";
-
+import { Toaster } from "react-hot-toast";
 function App() {
   const authCtx = useContext(AuthContext);
   return (
@@ -72,6 +72,7 @@ function App() {
           </Switch>
         )}
       </main>
+      <Toaster position="top-center" />
     </>
   );
 }

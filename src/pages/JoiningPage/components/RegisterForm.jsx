@@ -8,10 +8,12 @@ import {
   TextField,
   Link,
   OutlinedInput,
-  InputLabel,
   FormControl,
-} from "@material-ui/core";
-import { Button } from "@mui/material";
+  Button,
+  MenuItem,
+  Select,
+  InputLabel,
+} from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Visibility from "@material-ui/icons/Visibility";
@@ -19,6 +21,7 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
 import AuthContext from "../../../store/AuthContext";
+import toast from "react-hot-toast";
 
 const useStyles = makeStyles((theme) => ({
   margin: {
@@ -35,6 +38,11 @@ const RegisterForm = (props) => {
   const history = useHistory();
   const [showPassword, toggleShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [university, setUniversity] = useState("");
+
+  const handleUniversity = (event) => {
+    setUniversity(event.target.value);
+  };
 
   const handleClickShowPassword = () => {
     toggleShowPassword(!showPassword);
@@ -47,27 +55,27 @@ const RegisterForm = (props) => {
   const handleRegisterSubmit = (event) => {
     setIsLoading(true);
     event.preventDefault();
-    fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAvFOznWibkcC9X0GV2bFfBT_8AyDuH3NY",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          email: event.target.email.value,
-          password: event.target.password.value,
-          returnSecureToken: true,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    fetch("http://localhost:8080/api/auth/signup/", {
+      method: "POST",
+      body: JSON.stringify({
+        name: event.target.name.value,
+        username: event.target.username.value,
+        email: event.target.email.value,
+        collegeName: university,
+        password: event.target.password.value,
+        returnSecureToken: true,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((res) => {
         setIsLoading(false);
         if (res.ok) {
           return res.json();
         } else {
           return res.json().then((data) => {
-            let errorMessage = "Authentication Failed!";
+            let errorMessage = data.message;
 
             if (data && data.error && data.error.message) {
               errorMessage = data.error.message;
@@ -78,11 +86,11 @@ const RegisterForm = (props) => {
         }
       })
       .then((data) => {
-        authCtx.login(data.idToken);
-        history.replace("/blog");
+        toast.success("Signed Up Successfully!");
+        authCtx.login(data);
       })
       .catch((err) => {
-        alert(err.message);
+        toast.error(err.message);
       });
   };
 
@@ -99,13 +107,41 @@ const RegisterForm = (props) => {
         <TextField
           margin="normal"
           fullWidth
+          name="name"
+          id="name"
+          label="Name"
+          variant="outlined"
+          autoFocus
+        />
+        <TextField
+          margin="normal"
+          fullWidth
           required
           name="username"
           id="username"
           label="Username"
           variant="outlined"
-          autoFocus
         />
+        <FormControl
+          className={clsx(classes.margin, classes.textField)}
+          fullWidth
+        >
+          <InputLabel id="university">University</InputLabel>
+          <Select
+            sx={{ textAlign: "left" }}
+            labelId="university"
+            id="university"
+            value={university}
+            label="University"
+            onChange={handleUniversity}
+          >
+            <MenuItem value={"Jadavpur University"}>
+              Jadavpur University
+            </MenuItem>
+            <MenuItem value={"IIT Roorkee"}>IIT Roorkee</MenuItem>
+            <MenuItem value={"NIT Durgapur"}>NIT Durgapur</MenuItem>
+          </Select>
+        </FormControl>
         <TextField
           margin="normal"
           fullWidth
@@ -116,6 +152,7 @@ const RegisterForm = (props) => {
           label="Email Address"
           variant="outlined"
         />
+
         <FormControl
           className={clsx(classes.margin, classes.textField)}
           variant="outlined"
@@ -126,9 +163,7 @@ const RegisterForm = (props) => {
           <OutlinedInput
             fullWidth
             required
-            type="password"
             name="password"
-            id="password"
             label="Password"
             variant="outlined"
             id="outlined-adornment-password"
@@ -145,7 +180,6 @@ const RegisterForm = (props) => {
                 </IconButton>
               </InputAdornment>
             }
-            labelWidth={70}
           />
         </FormControl>
         {!isLoading && (
