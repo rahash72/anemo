@@ -62,7 +62,7 @@ export default function BlogCard({ blog }) {
   };
 
   return (
-    <Card sx={{ marginTop: "20px", boxShadow: "10px" }}>
+    <Card sx={{ width: "100%", marginTop: "20px", boxShadow: "10px" }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">

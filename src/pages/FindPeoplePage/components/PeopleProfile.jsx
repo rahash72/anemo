@@ -2,11 +2,43 @@ import { Typography, Box, IconButton } from "@mui/material";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import { Divider, Chip } from "@mui/material";
-import React from "react";
+import { Divider, Chip, Button } from "@mui/material";
+import React, { useState, useEffect } from "react";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import BlogCard from "../../BlogPage/BlogCard";
 
 const PeopleProfile = (props) => {
+  const [userData, setUserData] = useState();
+  const [viewBlog, setViewBlog] = useState(false);
+  const [blogs, setBlogs] = useState([]);
+  const handleViewBlog = () => {
+    if (!viewBlog) {
+      fetch("http://localhost:8080/profile/myblogs/" + props.id)
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+        })
+        .then((data) => {
+          setBlogs(data);
+        });
+    }
+    setViewBlog(!viewBlog);
+  };
+  useEffect(() => {
+    setViewBlog(false);
+    props.id &&
+      fetch("http://localhost:8080/profile/" + props.id)
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+        })
+        .then((data) => {
+          setUserData(data);
+        });
+  }, [props.isProfile, props.id]);
+
   return (
     <>
       {!props.isProfile && (
@@ -17,7 +49,7 @@ const PeopleProfile = (props) => {
           Click on a profile to display.
         </Typography>
       )}
-      {props.isProfile && (
+      {props.isProfile && userData && (
         <Box style={{ overflow: "auto" }}>
           <Box style={{ textAlign: "right" }}>
             <IconButton
@@ -33,47 +65,112 @@ const PeopleProfile = (props) => {
               <Chip color="primary" variant="outlined" label="Name" />
             </Divider>
             <ListItem className="list-item">
-              <ListItemText>Rahash Agarwal</ListItemText>
+              <ListItemText>{userData.name}</ListItemText>
             </ListItem>
+            {userData.bio && (
+              <>
+                <Divider variant="middle" textAlign="left">
+                  <Chip color="primary" variant="outlined" label="Bio" />
+                </Divider>
+                <ListItem className="list-item">
+                  <ListItemText>{userData.bio}</ListItemText>
+                </ListItem>
+              </>
+            )}
             <Divider variant="middle" textAlign="left">
-              <Chip color="primary" variant="outlined" label="Bio" />
+              <Chip color="primary" variant="outlined" label="College" />
             </Divider>
             <ListItem className="list-item">
-              <ListItemText>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Mollitia eos a sapiente tempora, perspiciatis alias error. Nobis
-                accusantium unde perspiciatis possimus quidem iste ab id totam
-                eveniet ducimus? Facere, dolor.
-              </ListItemText>
+              <ListItemText>{userData.collegeName}</ListItemText>
             </ListItem>
+            {userData.specialization && (
+              <>
+                <Divider variant="middle" textAlign="left">
+                  <Chip
+                    color="primary"
+                    variant="outlined"
+                    label="Specialization"
+                  />
+                </Divider>
+                <ListItem className="list-item">
+                  <ListItemText>{userData.specialization}</ListItemText>
+                </ListItem>
+              </>
+            )}
+            {userData.grad_year && (
+              <>
+                <Divider variant="middle" textAlign="left">
+                  <Chip
+                    color="primary"
+                    variant="outlined"
+                    label="Year of Graduation"
+                  />
+                </Divider>
+                <ListItem className="list-item">
+                  <ListItemText>
+                    {new Date(userData.grad_year).getFullYear()}
+                  </ListItemText>
+                </ListItem>
+              </>
+            )}
+            {userData.connect && (
+              <>
+                <Divider variant="middle" textAlign="left">
+                  <Chip color="primary" variant="outlined" label="Connect" />
+                </Divider>
+                <ListItem className="list-item">
+                  <ListItemText>{userData.connect}</ListItemText>
+                </ListItem>
+              </>
+            )}
+            {userData.skills && (
+              <>
+                <Divider variant="middle" textAlign="left">
+                  <Chip color="primary" variant="outlined" label="Skills" />
+                </Divider>
+                <ListItem className="list-item">
+                  <ListItemText>{userData.skills}</ListItemText>
+                </ListItem>
+              </>
+            )}
             <Divider variant="middle" textAlign="left">
-              <Chip color="primary" variant="outlined" label="Specialization" />
+              <Chip color="primary" variant="outlined" label="My Blogs" />
             </Divider>
-            <ListItem className="list-item">
-              <ListItemText>Computer Science Engineering</ListItemText>
-            </ListItem>
-            <Divider variant="middle" textAlign="left">
-              <Chip
-                color="primary"
-                variant="outlined"
-                label="Year of Graduation"
-              />
-            </Divider>
-            <ListItem className="list-item">
-              <ListItemText>2024</ListItemText>
-            </ListItem>
-            <Divider variant="middle" textAlign="left">
-              <Chip color="primary" variant="outlined" label="Connect" />
-            </Divider>
-            <ListItem className="list-item">
-              <ListItemText>Instagram: __rahash__</ListItemText>
-            </ListItem>
-            <Divider variant="middle" textAlign="left">
-              <Chip color="primary" variant="outlined" label="Skills" />
-            </Divider>
-            <ListItem className="list-item">
-              <ListItemText>Rahash Agarwal</ListItemText>
-            </ListItem>
+
+            {viewBlog && (
+              <>
+                <ListItem className="list-item">
+                  <Button onClick={handleViewBlog} variant="outlined" fullWidth>
+                    Hide Blogs
+                  </Button>
+                </ListItem>
+
+                {blogs.length === 0 && (
+                  <Typography
+                    sx={{ textAlign: "center", marginBottom: "20px" }}
+                    variant="body1"
+                    color="text.secondary"
+                  >
+                    No Blogs Added
+                  </Typography>
+                )}
+                {blogs.length !== 0 &&
+                  blogs.map((blog) => {
+                    return (
+                      <ListItem>
+                        <BlogCard blog={blog} key={blog._id} />
+                      </ListItem>
+                    );
+                  })}
+              </>
+            )}
+            {!viewBlog && (
+              <ListItem className="list-item">
+                <Button onClick={handleViewBlog} variant="contained" fullWidth>
+                  View Blogs
+                </Button>
+              </ListItem>
+            )}
           </List>
         </Box>
       )}

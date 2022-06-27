@@ -58,13 +58,13 @@ export default function SideBar(props) {
 
           <ListItemText primary={"Find People"} />
         </ListItem>
-        {/* <ListItem button onClick={() => history.push("/chat")}>
+        <ListItem button onClick={() => history.push("/chat")}>
           <ListItemIcon>
             <MessageOutlinedIcon />
           </ListItemIcon>
 
           <ListItemText primary={"Chat"} />
-        </ListItem> */}
+        </ListItem>
         <ListItem button onClick={() => history.push("/profile")}>
           <ListItemIcon>
             <AccountCircleOutlinedIcon />

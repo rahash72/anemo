@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 
-import { Grid, Fade, Divider } from "@mui/material";
+import { Grid, Fade } from "@mui/material";
 import PeoplesList from "./PeoplesList";
 import PeopleProfile from "./PeopleProfile";
 
 const DesktopView = () => {
   const [isProfile, setIsProfile] = useState(false);
+  const [id, setId] = useState("");
 
   const handleProfile = (value) => {
     setIsProfile(value);
@@ -24,7 +25,7 @@ const DesktopView = () => {
           }}
           xs={4}
         >
-          <PeoplesList handleShowProfile={handleProfile} />
+          <PeoplesList setId={setId} handleShowProfile={handleProfile} />
         </Grid>
         <Grid
           container
@@ -36,6 +37,7 @@ const DesktopView = () => {
           xs={8}
         >
           <PeopleProfile
+            id={id}
             isProfile={isProfile}
             handleShowProfile={handleProfile}
           />

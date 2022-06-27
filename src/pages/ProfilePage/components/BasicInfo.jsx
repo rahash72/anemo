@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-
+import React, { useState, useContext } from "react";
+import AuthContext from "../../../store/AuthContext";
 import { Avatar, Typography, Button } from "@mui/material";
 
 const BasicInfo = (props) => {
+  const authCtx = useContext(AuthContext);
   return (
     <>
       <Avatar
@@ -11,7 +12,7 @@ const BasicInfo = (props) => {
         style={{ height: "200px", marginTop: "100px", width: "200px" }}
       ></Avatar>
       <Typography style={{ marginTop: "80px" }} variant="h4">
-        Rubix
+        {authCtx.username}
       </Typography>
       {props.isEditable && (
         <Button
@@ -19,7 +20,7 @@ const BasicInfo = (props) => {
           style={{ marginTop: "50px" }}
           variant="outlined"
         >
-          Save
+          Cancel
         </Button>
       )}
       {!props.isEditable && (

@@ -3,14 +3,17 @@ import AuthContext from "../../store/AuthContext";
 import Modal from "@mui/material/Modal";
 import { Button, Box } from "@mui/material";
 import { Add } from "@material-ui/icons";
-import styled from "styled-components";
+import { styled, alpha } from "@mui/material/styles";
+import SearchIcon from "@mui/icons-material/Search";
+import InputBase from "@mui/material/InputBase";
 import { TextField, Typography } from "@mui/material";
 import toast from "react-hot-toast";
-
-const ButtonText = styled.span`
-  font-size: "40px";
-  color: "blue";
-`;
+import Input from "@mui/material/Input";
+import InputLabel from "@mui/material/InputLabel";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import PersonSearchTwoToneIcon from "@mui/icons-material/PersonSearchTwoTone";
+import InputAdornment from "@mui/material/InputAdornment";
+import PersonSearchOutlinedIcon from "@mui/icons-material/PersonSearchOutlined";
 
 const style = {
   position: "absolute",
@@ -24,11 +27,30 @@ const style = {
   p: 4,
 };
 
-const Appbar = () => {
+const Appbar = ({ setBlogs }) => {
   const [modalIsOpen, setmodalIsOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const authCtx = useContext(AuthContext);
+
+  const handleSearch = (event) => {
+    if (event.target.value) {
+      fetch(
+        "http://localhost:8080/blogs/search/" +
+          event.target.value +
+          "/" +
+          authCtx.id
+      )
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+        })
+        .then((data) => {
+          setBlogs(data);
+        });
+    }
+  };
 
   const titleHandler = (event) => {
     setTitle(event.target.value);
@@ -76,13 +98,23 @@ const Appbar = () => {
 
   return (
     <div style={{ textAlign: "right", width: "100%" }}>
+      <Input
+        onChange={handleSearch}
+        sx={{ float: "left", color: "white" }}
+        id="input-with-icon-adornment"
+        startAdornment={
+          <InputAdornment sx={{ color: "white" }} position="start">
+            <PersonSearchOutlinedIcon />
+          </InputAdornment>
+        }
+      />
       <Button
         color="inherit"
         variant="outlined"
         onClick={() => setmodalIsOpen(true)}
       >
         <Add />
-        <span className={ButtonText}>ADD BLOG</span>
+        <span>ADD BLOG</span>
       </Button>
       <Modal
         open={modalIsOpen}

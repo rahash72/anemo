@@ -5,6 +5,7 @@ import AuthContext from "../../store/AuthContext";
 import Modal from "@mui/material/Modal";
 import { Button, Box } from "@mui/material";
 import { TextField } from "@mui/material";
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import toast from "react-hot-toast";
 
 const style = {
@@ -26,6 +27,41 @@ const Comments = ({ blog }) => {
 
   const commentHandler = (event) => {
     setComment(event.target.value);
+  };
+
+  const deleteCommentHandler = (id) => {
+    fetch("http://localhost:8080/blogs/delete_comment/", {
+      method: "POST",
+      body: JSON.stringify({
+        userId: authCtx.id,
+        blogId: blog._id,
+        commentId: id,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          return res.json().then((data) => {
+            let errorMessage = data.message;
+
+            if (data && data.error && data.error.message) {
+              errorMessage = data.error.message;
+            }
+
+            throw new Error(errorMessage);
+          });
+        }
+      })
+      .then((data) => {
+        toast.success("Comment Deleted!");
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
   };
 
   const submitHandler = () => {
@@ -82,9 +118,18 @@ const Comments = ({ blog }) => {
         blog.comments.map((comment) => {
           return (
             <>
-              <Typography sx={{ marginTop: "15px" }}>
+              {comment.username === authCtx.username && (
+                <IconButton
+                  onClick={() => deleteCommentHandler(comment._id)}
+                  sx={{ float: "right" }}
+                >
+                  <DeleteForeverOutlinedIcon />
+                </IconButton>
+              )}
+              <Typography sx={{ marginTop: "10px" }}>
                 {comment.comment}
               </Typography>
+
               <Typography color="text.secondary" variant="body2">
                 {comment.username}
               </Typography>

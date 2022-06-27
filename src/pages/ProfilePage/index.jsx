@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect, useContext } from "react";
+import AuthContext from "../../store/AuthContext";
 import { Grid, Hidden, Fade } from "@mui/material";
 import "./styles.css";
 import BasicInfo from "./components/BasicInfo";
@@ -7,7 +7,18 @@ import ListInfo from "./components/ListInfo";
 import ListInfoEditable from "./components/ListInfoEditable";
 
 const ProfilePage = () => {
+  const authCtx = useContext(AuthContext);
   const [isEditable, toggleIsEditable] = useState(false);
+  const [userData, setUserData] = useState({});
+  useEffect(() => {
+    fetch("http://localhost:8080/profile/" + authCtx.id)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+      })
+      .then((data) => setUserData(data));
+  }, []);
 
   const handleEdit = () => {
     toggleIsEditable(!isEditable);
@@ -50,8 +61,14 @@ const ProfilePage = () => {
           xs={12}
           style={{ marginTop: "20px", borderLeft: "1px solid" }}
         >
-          {isEditable && <ListInfoEditable />}
-          {!isEditable && <ListInfo />}
+          {isEditable && (
+            <ListInfoEditable
+              userData={userData}
+              setUserData={setUserData}
+              handleEdit={handleEdit}
+            />
+          )}
+          {!isEditable && <ListInfo userData={userData} />}
         </Grid>
       </Grid>
     </Fade>

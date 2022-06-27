@@ -6,6 +6,7 @@ import PeopleProfile from "./PeopleProfile";
 
 const MobileView = () => {
   const [isProfile, setIsProfile] = useState(false);
+  const [id, setId] = useState("");
 
   const handleProfile = (value) => {
     setIsProfile(value);
@@ -16,12 +17,13 @@ const MobileView = () => {
       <Grid container spacing={3}>
         {!isProfile && (
           <Grid container item direction="column" xs={12}>
-            <PeoplesList handleShowProfile={handleProfile} />
+            <PeoplesList setId={setId} handleShowProfile={handleProfile} />
           </Grid>
         )}
         {isProfile && (
           <Grid container item direction="column" xs={12}>
             <PeopleProfile
+              id={id}
               isProfile={isProfile}
               handleShowProfile={handleProfile}
             />

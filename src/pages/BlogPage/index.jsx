@@ -49,7 +49,7 @@ function BlogPage(props) {
     <div className="BlogPage">
       <AppBar className={classes.appBar} position="static">
         <Toolbar>
-          <Appbar />
+          <Appbar setBlogs={setBlogs} />
         </Toolbar>
       </AppBar>
 

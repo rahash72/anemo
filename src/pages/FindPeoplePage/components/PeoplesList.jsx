@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from "react";
-
-import { peoples } from "../data";
+import React, { useState, useEffect, useContext } from "react";
 import {
   List,
   ListItemButton,
@@ -17,13 +15,14 @@ import Select from "@mui/material/Select";
 import DatePicker from "@mui/lab/DatePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-
+import AuthContext from "../../../store/AuthContext";
 const PeoplesList = (props) => {
-  const [yearFilter, setYearFilter] = useState("");
+  const authCtx = useContext(AuthContext);
+  const [yearFilter, setYearFilter] = useState(new Date(0).getFullYear());
   const [nameFilter, setNameFilter] = useState("");
   const [courseFilter, setCourseFilter] = useState("");
   const [filter, setFilter] = useState("Name");
-  const [filteredPeoples, setFilteredPeoples] = useState(peoples);
+  const [peoples, setPeoples] = useState([]);
 
   const handleFilterChange = (event) => {
     if (event.target.value === "Clear") {
@@ -40,36 +39,29 @@ const PeoplesList = (props) => {
     setCourseFilter(event.target.value);
   };
 
-  const handleProfile = (key) => {
-    console.log(key);
-  };
-
   const handleClearFilter = () => {
-    setYearFilter("");
+    setYearFilter(new Date(0).getFullYear());
     setNameFilter("");
     setCourseFilter("");
   };
 
   useEffect(() => {
-    if (yearFilter) {
-      setFilteredPeoples(
-        peoples.filter(
-          (peoples) =>
-            peoples.username.toLowerCase().includes(nameFilter.toLowerCase()) &&
-            peoples.course.toLowerCase().includes(courseFilter.toLowerCase()) &&
-            yearFilter.getFullYear() === peoples.year.getFullYear()
-        )
-      );
-    } else {
-      setFilteredPeoples(
-        peoples.filter(
-          (peoples) =>
-            peoples.username.toLowerCase().includes(nameFilter.toLowerCase()) &&
-            peoples.course.toLowerCase().includes(courseFilter.toLowerCase())
-        )
-      );
-    }
-  }, [yearFilter, nameFilter, courseFilter, peoples]);
+    let url = new URL("http://localhost:8080/find/filter/" + authCtx.id);
+    url.search = new URLSearchParams({
+      grad_year: new Date(yearFilter).getFullYear(),
+      specialization: courseFilter,
+      username: nameFilter,
+    });
+    fetch(url)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+      })
+      .then((data) => {
+        setPeoples(data);
+      });
+  }, [yearFilter, nameFilter, courseFilter]);
 
   return (
     <>
@@ -107,7 +99,6 @@ const PeoplesList = (props) => {
             value={yearFilter}
             onChange={(newValue) => {
               setYearFilter(newValue);
-              console.log(yearFilter);
             }}
             renderInput={(params) => (
               <TextField
@@ -129,31 +120,35 @@ const PeoplesList = (props) => {
           fullWidth
         />
       )}
-      {filteredPeoples.length === 0 && (
+      {!peoples && (
         <Typography marginTop="25vh" textAlign="center" variant="subtitle1">
           No Users Found
         </Typography>
       )}
       <List sx={{ width: "100%", bgcolor: "background.paper" }}>
         <Box style={{ maxHeight: "65vh", overflow: "auto" }}>
-          {filteredPeoples.length !== 0 &&
-            filteredPeoples.map((peoples) => {
+          {peoples &&
+            peoples.map((people) => {
               return (
                 <>
                   <ListItemButton
-                    key={peoples.key}
+                    key={people._id}
                     onClick={() => {
+                      props.setId(people._id);
                       props.handleShowProfile(true);
-                      handleProfile(peoples.key);
                     }}
                   >
                     <ListItemText
-                      primary={peoples.username}
-                      secondary={peoples.course}
+                      primary={people.username}
+                      secondary={people.specialization}
                     />
                     <ListItemText
                       style={{ textAlign: "right" }}
-                      secondary={peoples.year.getFullYear()}
+                      secondary={
+                        people.grad_year
+                          ? new Date(people.grad_year).getFullYear()
+                          : null
+                      }
                     />
                   </ListItemButton>
                   <Divider />
