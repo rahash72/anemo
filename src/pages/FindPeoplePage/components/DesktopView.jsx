@@ -14,10 +14,12 @@ const DesktopView = () => {
 
   return (
     <Fade in={true}>
-      <Grid container spacing={3}>
+      <Grid container height="100%" spacing={3}>
         <Grid
           container
           item
+          height="100%"
+          overflow="auto"
           direction="column"
           style={{
             paddingRight: "10px",
@@ -28,12 +30,11 @@ const DesktopView = () => {
           <PeoplesList setId={setId} handleShowProfile={handleProfile} />
         </Grid>
         <Grid
+          overflow="auto"
           container
           item
           direction="column"
-          style={{
-            height: "92vh",
-          }}
+          height="100%"
           xs={8}
         >
           <PeopleProfile

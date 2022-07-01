@@ -2,3 +2,10 @@
   box-sizing: border-box;
   font-family: "PT Sans", sans-serif;
 }
+
+.padd {
+  padding-top: 70px;
+  height: 100%;
+  margin-left: 10px;
+  margin-right: 10px;
+}

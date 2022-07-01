@@ -1,0 +1,42 @@
+.talk-bubble-left {
+  margin: 20px;
+  display: block;
+  min-width: 200px;
+  max-width: 300px;
+  height: auto;
+  background-color: #a0d995;
+}
+.round {
+  border-radius: 30px;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+}
+.talktext {
+  padding: 1rem;
+  text-align: left;
+  line-height: 1rem;
+  word-wrap: break-word;
+}
+.talktext p {
+  /* remove webkit p margins */
+  -webkit-margin-before: 0em;
+  -webkit-margin-after: 0em;
+}
+.talk-bubble-right {
+  margin: 20px;
+  margin-right: 0;
+  margin-left: auto;
+  display: block;
+  justify-content: right;
+  min-width: 200px;
+  max-width: 300px;
+  height: auto;
+  background-color: #b6c867;
+}
+.scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar::-webkit-scrollbar {
+  display: none;
+}

@@ -20,9 +20,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <main>
-        <Toolbar />
-
+      <div className="padd">
         {!authCtx.isLoggedIn && (
           <Switch>
             <Route path="/" exact>
@@ -71,7 +69,7 @@ function App() {
             </Route>
           </Switch>
         )}
-      </main>
+      </div>
       <Toaster position="top-center" />
     </>
   );

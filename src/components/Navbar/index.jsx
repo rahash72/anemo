@@ -33,33 +33,34 @@ export default function ButtonAppBar() {
   const isLoggedIn = authCtx.isLoggedIn;
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <AppBar
-        position="fixed"
+    <AppBar component="nav">
+      <Toolbar
+        component="nav"
         color="white"
+        style={{
+          backgroundColor: "white",
+        }}
         sx={{ width: `calc(100% - ${drawerWidth}px)`, mr: `${drawerWidth}px` }}
       >
-        <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            <img src="/images/Logo.png" className="nav-logo" />
-            {authCtx.isLoggedIn && (
-              <Link className="anemo-header" to="/blog">
-                Anemo
-              </Link>
-            )}
-            {!authCtx.isLoggedIn && (
-              <Link className="anemo-header" to="/">
-                Anemo
-              </Link>
-            )}
-          </Typography>
-          {isLoggedIn && (
-            <div>
-              <SideBar Logout={handleLogout} />
-            </div>
+        <Typography variant="h6" className={classes.title}>
+          <img src="/images/Logo.png" className="nav-logo" />
+          {authCtx.isLoggedIn && (
+            <Link className="anemo-header" to="/blog">
+              Anemo
+            </Link>
           )}
-        </Toolbar>
-      </AppBar>
-    </Box>
+          {!authCtx.isLoggedIn && (
+            <Link className="anemo-header" to="/">
+              Anemo
+            </Link>
+          )}
+        </Typography>
+        {isLoggedIn && (
+          <div>
+            <SideBar Logout={handleLogout} />
+          </div>
+        )}
+      </Toolbar>
+    </AppBar>
   );
 }

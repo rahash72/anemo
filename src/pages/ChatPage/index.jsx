@@ -1,16 +1,13 @@
 import React from "react";
-
+import { Hidden } from "@material-ui/core";
+import DesktopView from "./components/DesktopView";
 const ChatPage = () => {
   return (
-    <div
-      style={{
-        minHeight: "89vh",
-        backgroundImage: `url("/images/chat-blur.png")`,
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center center",
-      }}
-    ></div>
+    <>
+      <Hidden mdDown>
+        <DesktopView />
+      </Hidden>
+    </>
   );
 };
 

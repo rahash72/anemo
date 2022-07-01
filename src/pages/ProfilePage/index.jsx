@@ -26,10 +26,11 @@ const ProfilePage = () => {
 
   return (
     <Fade in={true}>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} height="100%">
         <Hidden mdDown>
-          <Grid container item md={4}></Grid>
+          <Grid container item md={4} height="100%"></Grid>
           <Grid
+            height="100%"
             container
             item
             direction="column"
@@ -47,6 +48,7 @@ const ProfilePage = () => {
             item
             direction="column"
             alignItems="center"
+            height="100%"
             md={4}
             xs={12}
           >
@@ -56,9 +58,11 @@ const ProfilePage = () => {
         <Grid
           container
           item
+          overflow="auto"
           direction="column"
           md={8}
           xs={12}
+          height="100%"
           style={{ marginTop: "20px", borderLeft: "1px solid" }}
         >
           {isEditable && (
