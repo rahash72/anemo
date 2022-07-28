@@ -13,6 +13,7 @@ const Chat = (props) => {
   const [messages, setMessages] = useState();
   const [text, setText] = useState();
   const [shift, setShift] = useState();
+  const [isNew, setIsNew] = useState(true);
 
   const handleSubmit = () => {
     if (text) {
@@ -44,9 +45,14 @@ const Chat = (props) => {
           }
         })
         .then((data) => {
-          if (!messages) {
+          if (isNew) {
+            setIsNew(false);
+            if (data.user1 === authCtx.id) {
+              props.setId(data.user2);
+            } else props.setId(data.user1);
             setMessages(data);
-            props.setId(data._id);
+          } else {
+            setMessages(data);
           }
         })
         .catch((err) => {});
@@ -67,6 +73,7 @@ const Chat = (props) => {
       })
       .then((data) => {
         if (data) {
+          setIsNew(false);
           setMessages(data);
 
           const pusher = new Pusher("fa9ed026dede4902b34e", {
@@ -77,9 +84,15 @@ const Chat = (props) => {
           channel.bind("updated", (data) => {
             setMessages(data);
           });
+
+          return () => {
+            pusher.unsubscribe("private" + data.id);
+          };
+        } else {
+          setMessages(null);
         }
       });
-  }, [props.id]);
+  }, [props.id, isNew]);
 
   return (
     <>
@@ -185,6 +198,7 @@ const Chat = (props) => {
             multiline
             maxRows={3}
             variant="outlined"
+            autoFocus
           />
           <IconButton
             onClick={handleSubmit}

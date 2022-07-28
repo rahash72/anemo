@@ -18,11 +18,13 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AuthContext from "../../../store/AuthContext";
 import NewPeople from "./NewPeople";
+import Pusher from "pusher-js";
 
 const ChatList = (props) => {
   const authCtx = useContext(AuthContext);
   const [chats, setChats] = useState([]);
   const [addChat, setAddChat] = useState(false);
+  const [isNew, setIsNew] = useState(false);
 
   const handleAddChat = () => {
     setAddChat(!addChat);
@@ -36,10 +38,37 @@ const ChatList = (props) => {
         }
       })
       .then((data) => {
-        setChats(data.chatList);
-        console.log(data);
+        if (data) {
+          const pusher = new Pusher("fa9ed026dede4902b34e", {
+            cluster: "ap2",
+          });
+
+          const channel = pusher.subscribe("private" + data._id);
+          channel.bind("updated", (data) => {
+            setChats(data.chatList);
+          });
+
+          setChats(data.chatList);
+          return () => {
+            pusher.unsubscribe("private" + data._id);
+          };
+        } else {
+          const pusher = new Pusher("fa9ed026dede4902b34e", {
+            cluster: "ap2",
+          });
+
+          const channel = pusher.subscribe("private" + authCtx.id);
+          channel.bind("inserted", (data) => {
+            setChats(data.chatList);
+            setIsNew(true);
+          });
+
+          return () => {
+            pusher.unsubscribe("private" + authCtx.id);
+          };
+        }
       });
-  }, [addChat]);
+  }, [addChat, isNew]);
 
   return (
     <>

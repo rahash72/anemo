@@ -57,7 +57,10 @@ const ListInfoEditable = ({ userData, setUserData, handleEdit }) => {
   };
   return (
     <List>
-      <Divider variant="middle" textAlign="left">
+      <Button onClick={submitHandler} variant="contained" fullWidth>
+        SAVE
+      </Button>
+      <Divider style={{ marginTop: "20px" }} variant="middle" textAlign="left">
         <Chip color="primary" variant="outlined" label="Bio" />
       </Divider>
       <ListItem className="list-item">
@@ -129,9 +132,6 @@ const ListInfoEditable = ({ userData, setUserData, handleEdit }) => {
           fullWidth
         />
       </ListItem>
-      <Button onClick={submitHandler} variant="contained" fullWidth>
-        SAVE
-      </Button>
     </List>
   );
 };

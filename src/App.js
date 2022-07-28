@@ -9,10 +9,7 @@ import { Toolbar } from "@mui/material";
 import ProfilePage from "./pages/ProfilePage";
 import ChatPage from "./pages/ChatPage";
 import FindPeoplePage from "./pages/FindPeoplePage";
-import Cart from "./pages/EcommercePage/pages/Cart";
-import ServiceList from "./pages/EcommercePage/pages/ServiceList";
-import ProductList from "./pages/EcommercePage/pages/ProductList";
-import EcommercePage from "./pages/EcommercePage/pages/EcommercePage";
+import EcommercePage from "./pages/EcommercePage/";
 import "./App.css";
 import { Toaster } from "react-hot-toast";
 function App() {
@@ -54,15 +51,6 @@ function App() {
             </Route>
             <Route path="/ecommerce" exact>
               <EcommercePage />
-            </Route>
-            <Route path="/ecommerce/favourites" exact>
-              <Cart />
-            </Route>
-            <Route path="/ecommerce/product" exact>
-              <ProductList />
-            </Route>
-            <Route path="/ecommerce/service" exact>
-              <ServiceList />
             </Route>
             <Route path="*">
               <Redirect to="/blog" />
