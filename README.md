@@ -4,7 +4,7 @@
 <div id="top"></div>
 This repository contains the code for the backend of the app.
 <br />
-The code for the fronted can be found at (https://github.com/rahash72/anemo-frontend).
+The code for the fronted can be found at (https://github.com/aryan0103raj/anemo-backend).
 
 <br /><br />
 <details>
@@ -39,10 +39,7 @@ personalize your profile by adding details of yourself, as well as a profile pic
 
 ### Built With
 
-* [![Node.js][Node.js]][Node-url]
-* [![Express.js][Express.js]][Express-url]
-* [![MongoDB][MongoDB]][MongoDB-url]
-* [![Pusher][Pusher]][Pusher-url]
+* [![React.js][React.js]][React-url]
 
 <p align="right">(<a href="#top">Back to top</a>)</p>
 
@@ -50,46 +47,30 @@ personalize your profile by adding details of yourself, as well as a profile pic
 
 ### Prerequisites
 
-You need to install Node Package Manager(npm).
-* npm
+You need to install Yarn Package Manager(yarn).
+* Yarn
   ```sh
-  npm install npm@latest -g
+  npm install -g yarn
   ```
   
 ### Installation
 
-1. Get a free API Key at [Pusher](https://pusher.com/)
-2. Create a new MongoDB collection at [MongoDB](https://www.mongodb.com/)
-3. Clone the repo
+1. Clone the repo
    ```sh
    git clone https://github.com/github_username/repo_name.git
    ```
-4. Install NPM packages
+2. Install YARN packages
    ```sh
-   npm install
+   yarn install
    ```
-5. Enter your Pusher API Key details in `.env`
-   ```js
-   app_id = 'Your app_id'
-   key = 'Your key'
-   secret = 'Your secret'
-   cluster = 'Your cluster'
-6. Enter the URI of your MongoDB collection in `.env`
-   ```js
-   MONGO_URI = 'Your URI'
-7. Run the backend server. It runs at localhost:8080
+3. Run the frontend app. It runs at localhost:3000
    ```sh
-   npm start
+   yarn start
    ```
 
 <p align="right">(<a href="#top">Back to top</a>)</p>
 
 
-[Node.js]: https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white
-[Node-url]: https://nodejs.org/en/
-[Express-url]: https://expressjs.com/
-[Express.js]: https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB
-[MongoDB]: https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white
-[MongoDB-url]: https://www.mongodb.com/
-[Pusher-url]: https://pusher.com/
-[Pusher]: https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,h_256,w_256,f_auto,q_auto:eco,dpr_1/d7qbtxjvzkenornpfqgm
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
+
